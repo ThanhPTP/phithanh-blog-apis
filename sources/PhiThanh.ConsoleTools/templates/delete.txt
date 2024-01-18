@@ -1,0 +1,36 @@
+﻿using [namespaces].Core;
+using [namespaces].DataAccess.Repositories;
+
+namespace [namespaces].Modules.[endpointUpper]Module
+{
+    public class Delete[endpointUpper]Request : BaseCommand
+    {
+        public Guid Id { get; set; }
+    }
+
+    public class Delete[endpointUpper]ProfileMapper : AutoMapper.Profile
+    {
+        public Delete[endpointUpper]ProfileMapper()
+        {
+        }
+    }
+
+    public class Delete[endpointUpper]Validator : BaseValidator<Delete[endpointUpper]Request>
+    {
+        public Delete[endpointUpper]Validator()
+        {
+        }
+    }
+
+    public class Delete[endpointUpper]Handler(I[endpointUpper]Repository [endpointLower]Repository) :
+        ICommandHandler<Delete[endpointUpper]Request>
+    {
+        private readonly I[endpointUpper]Repository _[endpointLower]Repository = [endpointLower]Repository;
+
+        public async Task<ApiResponse> Handle(Delete[endpointUpper]Request request, CancellationToken cancellationToken)
+        {
+            await _[endpointLower]Repository.DeleteAsync(request.Id, true);
+            return new ApiResponse();
+        }
+    }
+}

@@ -1,0 +1,58 @@
+﻿using AutoMapper;
+using [namespaces].Core;
+using [namespaces].Core.Utils;
+using [namespaces].DataAccess.Entities;
+using [namespaces].DataAccess.Repositories;
+using [namespaces].Resources;
+
+namespace [namespaces].Modules.[endpointUpper]Module
+{
+    public class GetDetail[endpointUpper]Request : BaseQuery<GetDetail[endpointUpper]Response>
+    {
+        public Guid Id { get; set; }
+    }
+
+    public class GetDetail[endpointUpper]Response
+    {
+        public Guid Id { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    public class GetDetail[endpointUpper]ProfileMapper : AutoMapper.Profile
+    {
+        public GetDetail[endpointUpper]ProfileMapper()
+        {
+            CreateMap<[endpointUpper], GetDetail[endpointUpper]Response>();
+        }
+    }
+
+    public class GetDetail[endpointUpper]Validator : BaseValidator<GetDetail[endpointUpper]Request>
+    {
+        public GetDetail[endpointUpper]Validator()
+        {
+        }
+    }
+
+    public class GetDetail[endpointUpper]Handler(I[endpointUpper]Repository [endpointLower]Repository, IMapper mapper) :
+        IQueryHandler<GetDetail[endpointUpper]Request, GetDetail[endpointUpper]Response>
+    {
+        private readonly IMapper _mapper = mapper;
+        private readonly I[endpointUpper]Repository _[endpointLower]Repository = [endpointLower]Repository;
+
+        public async Task<ApiResponse<GetDetail[endpointUpper]Response>> Handle(GetDetail[endpointUpper]Request request, CancellationToken cancellationToken)
+        {
+            var shop = await _[endpointLower]Repository.GetFirstOrDefaultAsync(f => f.Id == request.Id);
+            if (shop == null)
+            {
+                ExceptionUtils.ThrowValidation(nameof(request.Id),
+                           nameof(ValidationMessage.ERR_004_DATA_NOT_EXISTS),
+                           ValidationMessage.ERR_004_DATA_NOT_EXISTS);
+            }
+
+            return new ApiResponse<GetDetail[endpointUpper]Response>(
+                _mapper.Map<GetDetail[endpointUpper]Response>(shop)
+            );
+        }
+    }
+}

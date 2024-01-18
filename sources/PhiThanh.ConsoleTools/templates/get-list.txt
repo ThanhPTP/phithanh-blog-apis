@@ -1,0 +1,60 @@
+﻿using AutoMapper;
+using [namespaces].Core;
+using [namespaces].Core.Extensions;
+using [namespaces].DataAccess.Entities;
+using [namespaces].DataAccess.Repositories;
+using System.Linq.Expressions;
+
+namespace [namespaces].Modules.[endpointUpper]Module
+{
+    public class GetList[endpointUpperPlural]Request : BaseListQuery<PagingResult<GetList[endpointUpperPlural]Response>>
+    {
+        public string? Search { get; set; }
+    }
+
+    public class GetList[endpointUpperPlural]Response
+    {
+        public Guid Id { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
+    }
+
+    public class GetList[endpointUpperPlural]ProfileMapper : AutoMapper.Profile
+    {
+        public GetList[endpointUpperPlural]ProfileMapper()
+        {
+            CreateMap<[endpointUpper], GetList[endpointUpperPlural]Response>();
+        }
+    }
+
+    public class GetList[endpointUpperPlural]Validator : BaseValidator<GetList[endpointUpperPlural]Request>
+    {
+        public GetList[endpointUpperPlural]Validator()
+        {
+        }
+    }
+
+    public class GetList[endpointUpperPlural]Handler(I[endpointUpper]Repository [endpointLower]Repository, IMapper mapper) :
+        IQueryHandler<GetList[endpointUpperPlural]Request, PagingResult<GetList[endpointUpperPlural]Response>>
+    {
+        private readonly IMapper _mapper = mapper;
+        private readonly I[endpointUpper]Repository _[endpointLower]Repository = [endpointLower]Repository;
+
+        public async Task<ApiResponse<PagingResult<GetList[endpointUpperPlural]Response>>> Handle(GetList[endpointUpperPlural]Request request, CancellationToken cancellationToken)
+        {
+            Expression<Func<[endpointUpper], bool>> predicate = x => !x.IsDeleted;
+
+            if (!string.IsNullOrEmpty(request.Search))
+            {
+                string search = request.Search.ToLower();
+                predicate = predicate.And(x => x.Code.ToLower().Contains(search)
+                || x.Name.ToLower().Contains(search));
+            }
+
+            var shops = await _[endpointLower]Repository.GetAsync(predicate, request.FilterOptions);
+            return new ApiResponse<PagingResult<GetList[endpointUpperPlural]Response>>(
+                _mapper.Map<PagingResult<GetList[endpointUpperPlural]Response>>(shops)
+            );
+        }
+    }
+}

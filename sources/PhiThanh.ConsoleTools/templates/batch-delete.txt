@@ -1,0 +1,36 @@
+﻿using [namespaces].Core;
+using [namespaces].DataAccess.Repositories;
+
+namespace [namespaces].Modules.[endpointUpper]Module
+{
+    public class DeleteBatch[endpointUpperPlural]Request : BaseCommand
+    {
+        public List<Guid> Ids { get; set; } = [];
+    }
+
+    public class DeleteBatch[endpointUpperPlural]ProfileMapper : AutoMapper.Profile
+    {
+        public DeleteBatch[endpointUpperPlural]ProfileMapper()
+        {
+        }
+    }
+
+    public class DeleteBatch[endpointUpperPlural]Validator : BaseValidator<DeleteBatch[endpointUpperPlural]Request>
+    {
+        public DeleteBatch[endpointUpperPlural]Validator()
+        {
+        }
+    }
+
+    public class DeleteBatch[endpointUpperPlural]Handler(I[endpointUpper]Repository [endpointLower]Repository) :
+        ICommandHandler<DeleteBatch[endpointUpperPlural]Request>
+    {
+        private readonly I[endpointUpper]Repository _[endpointLower]Repository = [endpointLower]Repository;
+
+        public async Task<ApiResponse> Handle(DeleteBatch[endpointUpperPlural]Request request, CancellationToken cancellationToken)
+        {
+            await _[endpointLower]Repository.DeleteAsync(w => request.Ids.Contains(w.Id), true);
+            return new ApiResponse();
+        }
+    }
+}

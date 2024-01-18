@@ -1,0 +1,73 @@
+﻿using AutoMapper;
+using [namespaces].Core;
+using [namespaces].Core.Utils;
+using [namespaces].DataAccess.Entities;
+using [namespaces].DataAccess.Repositories;
+using [namespaces].Resources;
+
+namespace [namespaces].Modules.[endpointUpper]Module
+{
+    public class CreateOrUpdate[endpointUpper]Request : BaseCommand
+    {
+        public Guid? Id { get; set; }
+    }
+
+    public class CreateOrUpdate[endpointUpper]ProfileMapper : AutoMapper.Profile
+    {
+        public CreateOrUpdate[endpointUpper]ProfileMapper()
+        {
+            CreateMap<CreateOrUpdate[endpointUpper]Request, [endpointUpper]>();
+        }
+    }
+
+    public class CreateOrUpdate[endpointUpper]Validator : BaseValidator<CreateOrUpdate[endpointUpper]Request>
+    {
+        public CreateOrUpdate[endpointUpper]Validator()
+        {
+        }
+    }
+
+    public class CreateOrUpdate[endpointUpper]Handler(I[endpointUpper]Repository [endpointLower]Repository, IMapper mapper) :
+        ICommandHandler<CreateOrUpdate[endpointUpper]Request>
+    {
+        private readonly IMapper _mapper = mapper;
+        private readonly I[endpointUpper]Repository _[endpointLower]Repository = [endpointLower]Repository;
+
+        public async Task<ApiResponse> Handle(CreateOrUpdate[endpointUpper]Request request, CancellationToken cancellationToken)
+        {
+            if (request.Id == null)
+            {
+                await InsertAsync(request);
+            }
+            else
+            {
+                await UpdateAsync(request);
+            }
+            return new ApiResponse();
+        }
+
+        private async Task<[endpointUpper]> InsertAsync(CreateOrUpdate[endpointUpper]Request request)
+        {
+            var entity = _mapper.Map<[endpointUpper]>(request);
+            await _[endpointLower]Repository.InsertAsync(entity, true);
+            return entity;
+        }
+
+        private async Task<[endpointUpper]> UpdateAsync(CreateOrUpdate[endpointUpper]Request request)
+        {
+            var entity = await _[endpointLower]Repository.GetFirstOrDefaultAsync(f => f.Id == request.Id!.Value);
+
+            if (entity == null)
+            {
+                ExceptionUtils.ThrowValidation(nameof(request.Id),
+                           nameof(ValidationMessage.ERR_004_DATA_NOT_EXISTS),
+                           ValidationMessage.ERR_004_DATA_NOT_EXISTS);
+
+                return new [endpointUpper]();
+            }
+            
+            await _[endpointLower]Repository.UpdateAsync(entity, true);
+            return entity;
+        }
+    }
+}

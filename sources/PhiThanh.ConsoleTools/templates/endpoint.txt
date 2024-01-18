@@ -1,0 +1,35 @@
+﻿using Carter;
+using [namespaces].Core;
+using [namespaces].Core.Extensions;
+using [namespaces].Modules.[endpoint]Module;
+
+namespace [namespaces].Operation.WebApi.Endpoints
+{
+    public class [endpointUpper]Endpoints : CarterModule
+    {
+        private const string TAG_ROUTE = "[endpointLower]";
+        public [endpointUpper]Endpoints() : base($"api/v{{version:apiVersion}}/{TAG_ROUTE}")
+        {
+            WithTags(TAG_ROUTE);
+            RequireAuthorization();
+        }
+
+        public override void AddRoutes(IEndpointRouteBuilder app)
+        {
+            app.AddEndpoints<GetList[endpointUpperPlural]Request>("/get-list-[endpointLowerPlural]")
+                .Produces(200, typeof(ApiResponse<PagingResult<GetList[endpointUpperPlural]Response>>));
+
+            app.AddEndpoints<GetDetail[endpointUpper]Request>("/get-detail-[endpointLower]")
+                .Produces(200, typeof(ApiResponse<GetDetail[endpointUpper]Response>));
+
+            app.AddEndpoints<CreateOrUpdate[endpointUpper]Request>("/create-or-update-[endpointLower]")
+                .Produces(200, typeof(ApiResponse));
+
+            app.AddEndpoints<Delete[endpointUpper]Request>("/delete-[endpointLower]")
+                .Produces(200, typeof(ApiResponse));
+
+            app.AddEndpoints<DeleteBatch[endpointUpperPlural]Request>("/delete-batch-[endpointLowerPlural]")
+                .Produces(200, typeof(ApiResponse));
+        }
+    }
+}

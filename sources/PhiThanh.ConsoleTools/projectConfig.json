@@ -1,0 +1,5 @@
+{
+  "api": "PhiThanh.WebApi",
+  "module": "PhiThanh.Modules",
+  "namespaces": "PhiThanh"
+}

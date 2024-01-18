@@ -1,0 +1,9 @@
+Add-Migration xxx
+Update-Database
+Script-Migration -From: XXX -Output:./PhiThanh.DataAccess\Scripts\0001.XXX.sql
+
+dotnet ef migrations add InitialCreate -s ..\PhiThanh.WebApi\PhiThanh.WebApi.csproj -c CoreDataContext
+dotnet ef database update -s ..\PhiThanh.WebApi\PhiThanh.WebApi.csproj -c CoreDataContext
+dotnet ef migrations remove -s ..\PhiThanh.WebApi\PhiThanh.WebApi.csproj -c CoreDataContext
+dotnet ef migrations list -s ..\PhiThanh.WebApi\PhiThanh.WebApi.csproj
+dotnet ef database update xxx -s ..\PhiThanh.WebApi\PhiThanh.WebApi.csproj
