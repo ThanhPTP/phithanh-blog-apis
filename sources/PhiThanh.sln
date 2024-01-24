@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhiThanh.DataAccess", "PhiT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhiThanh.Resources", "PhiThanh.Resources\PhiThanh.Resources.csproj", "{67CDDF99-C04E-4983-99F5-7AD9B997CA1F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhiThanh.ConsoleTools", "PhiThanh.ConsoleTools\PhiThanh.ConsoleTools.csproj", "{09F0F0B1-01AB-4216-BD61-C4C04CD2734C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PhiThanh.ConsoleTools", "PhiThanh.ConsoleTools\PhiThanh.ConsoleTools.csproj", "{09F0F0B1-01AB-4216-BD61-C4C04CD2734C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. WebApis", "01. WebApis", "{09FBE8AD-D104-41AD-832F-D40DEE530E64}"
 EndProject
@@ -24,6 +24,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "04. Common", "04. Common", "{D83A0545-7E12-4108-A0B0-195D0D89422E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7AB084A1-0920-40C0-ADCC-126D735529E6}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		..\README.md = ..\README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

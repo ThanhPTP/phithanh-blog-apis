@@ -16,6 +16,7 @@ namespace PhiThanh.Modules.CategoryModule
         public string? Slug { get; set; }
         public string? LogoUrl { get; set; }
         public string? BannerUrl { get; set; }
+        public int Order { get; set; }
         public Guid? ParentCategoryId { get; set; }
     }
 
@@ -92,6 +93,7 @@ namespace PhiThanh.Modules.CategoryModule
             entity.Name = request.Name;
             entity.Description = request.Description;
             entity.Slug = request.Slug;
+            entity.Order = request.Order;
             entity.BannerUrl = request.BannerUrl;
 
             if (entity.ParentCategoryId != null)

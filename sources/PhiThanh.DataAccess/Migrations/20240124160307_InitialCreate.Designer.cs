@@ -11,7 +11,7 @@ using PhiThanh.DataAccess.Contexts;
 namespace PhiThanh.DataAccess.Migrations
 {
     [DbContext(typeof(CoreDataContext))]
-    [Migration("20240118113354_InitialCreate")]
+    [Migration("20240124160307_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -56,10 +56,10 @@ namespace PhiThanh.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<Guid?>("ParentCategoryId")
-                        .HasColumnType("char(36)");
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
 
-                    b.Property<Guid?>("PostId")
+                    b.Property<Guid?>("ParentCategoryId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Slug")
@@ -68,8 +68,6 @@ namespace PhiThanh.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("ParentCategoryId");
-
-                    b.HasIndex("PostId");
 
                     b.ToTable("Categories");
                 });
@@ -150,6 +148,9 @@ namespace PhiThanh.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
+                    b.Property<DateTime?>("DisplayDate")
+                        .HasColumnType("datetime(6)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("tinyint(1)");
 
@@ -159,6 +160,9 @@ namespace PhiThanh.DataAccess.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<int>("PostStatus")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("longtext");
@@ -166,6 +170,78 @@ namespace PhiThanh.DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Posts");
+                });
+
+            modelBuilder.Entity("PhiThanh.DataAccess.Entities.PostCategory", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid?>("ModifiedById")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("PostId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CategoryId");
+
+                    b.HasIndex("PostId");
+
+                    b.ToTable("PostCategories");
+                });
+
+            modelBuilder.Entity("PhiThanh.DataAccess.Entities.PostTag", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("CreatedById")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<Guid?>("ModifiedById")
+                        .HasColumnType("char(36)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<Guid?>("PostId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<Guid?>("TagId")
+                        .HasColumnType("char(36)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("TagId");
+
+                    b.ToTable("PostTags");
                 });
 
             modelBuilder.Entity("PhiThanh.DataAccess.Entities.Tag", b =>
@@ -193,15 +269,10 @@ namespace PhiThanh.DataAccess.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("PostId")
-                        .HasColumnType("char(36)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("Key")
                         .IsUnique();
-
-                    b.HasIndex("PostId");
 
                     b.ToTable("Tags");
                 });
@@ -211,10 +282,6 @@ namespace PhiThanh.DataAccess.Migrations
                     b.HasOne("PhiThanh.DataAccess.Entities.Category", "ParentCategory")
                         .WithMany()
                         .HasForeignKey("ParentCategoryId");
-
-                    b.HasOne("PhiThanh.DataAccess.Entities.Post", null)
-                        .WithMany("Categories")
-                        .HasForeignKey("PostId");
 
                     b.Navigation("ParentCategory");
                 });
@@ -236,11 +303,34 @@ namespace PhiThanh.DataAccess.Migrations
                     b.Navigation("Post");
                 });
 
-            modelBuilder.Entity("PhiThanh.DataAccess.Entities.Tag", b =>
+            modelBuilder.Entity("PhiThanh.DataAccess.Entities.PostCategory", b =>
                 {
-                    b.HasOne("PhiThanh.DataAccess.Entities.Post", null)
+                    b.HasOne("PhiThanh.DataAccess.Entities.Category", "Category")
+                        .WithMany()
+                        .HasForeignKey("CategoryId");
+
+                    b.HasOne("PhiThanh.DataAccess.Entities.Post", "Post")
+                        .WithMany("Categories")
+                        .HasForeignKey("PostId");
+
+                    b.Navigation("Category");
+
+                    b.Navigation("Post");
+                });
+
+            modelBuilder.Entity("PhiThanh.DataAccess.Entities.PostTag", b =>
+                {
+                    b.HasOne("PhiThanh.DataAccess.Entities.Post", "Post")
                         .WithMany("Tags")
                         .HasForeignKey("PostId");
+
+                    b.HasOne("PhiThanh.DataAccess.Entities.Tag", "Tag")
+                        .WithMany()
+                        .HasForeignKey("TagId");
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("PhiThanh.DataAccess.Entities.Post", b =>

@@ -11,6 +11,12 @@ namespace PhiThanh.Core
             Inactive = 1
         }
 
+        public enum PostStatus
+        {
+            Draft = 0,
+            Publish = 1
+        }
+
         public static readonly List<string> ExtensionsAllowUpload =
         [
             ".jpg",

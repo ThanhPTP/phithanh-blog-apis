@@ -21,6 +21,7 @@ namespace PhiThanh.Modules.CategoryModule
         public string? LogoUrl { get; set; }
         public string? BannerUrl { get; set; }
         public int Level { get; set; }
+        public int Order { get; set; }
         public Guid? ParentCategoryId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? ModifiedDate { get; set; }

@@ -10,6 +10,7 @@ namespace PhiThanh.DataAccess.Entities
         public string? Slug { get; set; }
         public string? BannerUrl { get; set; }
         public int Level { get; set; }
+        public int Order { get; set; }
 
         [ForeignKey(nameof(ParentCategory))]
         public virtual Guid? ParentCategoryId { get; set; }
