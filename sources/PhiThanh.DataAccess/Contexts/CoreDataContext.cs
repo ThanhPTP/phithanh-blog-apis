@@ -11,5 +11,20 @@ namespace PhiThanh.DataAccess.Contexts
         public DbSet<Tag> Tags { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Post> Posts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<Post>()
+                .HasMany(e => e.Categories)
+                .WithOne(e => e.Post)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder
+                .Entity<Post>()
+                .HasMany(e => e.Tags)
+                .WithOne(e => e.Post)
+                .OnDelete(DeleteBehavior.Cascade);
+        }
     }
 }

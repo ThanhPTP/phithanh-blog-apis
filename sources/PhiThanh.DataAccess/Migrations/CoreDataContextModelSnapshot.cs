@@ -179,7 +179,7 @@ namespace PhiThanh.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("CategoryId")
+                    b.Property<Guid>("CategoryId")
                         .HasColumnType("char(36)");
 
                     b.Property<Guid?>("CreatedById")
@@ -197,7 +197,7 @@ namespace PhiThanh.DataAccess.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("PostId")
+                    b.Property<Guid>("PostId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -230,10 +230,10 @@ namespace PhiThanh.DataAccess.Migrations
                     b.Property<DateTime?>("ModifiedDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<Guid?>("PostId")
+                    b.Property<Guid>("PostId")
                         .HasColumnType("char(36)");
 
-                    b.Property<Guid?>("TagId")
+                    b.Property<Guid>("TagId")
                         .HasColumnType("char(36)");
 
                     b.HasKey("Id");
@@ -308,11 +308,15 @@ namespace PhiThanh.DataAccess.Migrations
                 {
                     b.HasOne("PhiThanh.DataAccess.Entities.Category", "Category")
                         .WithMany()
-                        .HasForeignKey("CategoryId");
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PhiThanh.DataAccess.Entities.Post", "Post")
                         .WithMany("Categories")
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
 
@@ -323,11 +327,15 @@ namespace PhiThanh.DataAccess.Migrations
                 {
                     b.HasOne("PhiThanh.DataAccess.Entities.Post", "Post")
                         .WithMany("Tags")
-                        .HasForeignKey("PostId");
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("PhiThanh.DataAccess.Entities.Tag", "Tag")
                         .WithMany()
-                        .HasForeignKey("TagId");
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Post");
 

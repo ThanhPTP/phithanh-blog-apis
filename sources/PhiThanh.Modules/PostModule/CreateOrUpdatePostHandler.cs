@@ -6,7 +6,6 @@ using PhiThanh.DataAccess.Entities;
 using PhiThanh.DataAccess.Kernel;
 using PhiThanh.DataAccess.Repositories;
 using PhiThanh.Resources;
-using Serilog;
 using static PhiThanh.Core.Constants;
 
 namespace PhiThanh.Modules.PostModule
@@ -42,7 +41,7 @@ namespace PhiThanh.Modules.PostModule
     }
 
     public class CreateOrUpdatePostHandler(IPostRepository postRepository,
-        ITagRepository tagRepository, IUnitOfWork uow, IMapper mapper, ILogger logger,
+        ITagRepository tagRepository, IUnitOfWork uow, IMapper mapper,
         ICategoryRepository categoryRepository, IPostCategoryRepository postCategoryRepository,
         IPostTagRepository postTagRepository) :
         ICommandHandler<CreateOrUpdatePostRequest>
@@ -54,30 +53,16 @@ namespace PhiThanh.Modules.PostModule
         private readonly IPostCategoryRepository _postCategoryRepository = postCategoryRepository;
         private readonly IPostTagRepository _postTagRepository = postTagRepository;
         private readonly IUnitOfWork _uow = uow;
-        private readonly ILogger _logger = logger;
 
         public async Task<ApiResponse> Handle(CreateOrUpdatePostRequest request, CancellationToken cancellationToken)
         {
-            try
+            if (request.Id == null)
             {
-                _uow.BeginTransaction();
-                if (request.Id == null)
-                {
-                    await InsertAsync(request);
-                }
-                else
-                {
-                    await UpdateAsync(request);
-                }
+                await InsertAsync(request);
             }
-            catch (Exception ex)
+            else
             {
-                _logger.Error(ex, ex.Message);
-                _uow.RollBackTransaction();
-            }
-            finally
-            {
-                _uow.CommitTransaction();
+                await UpdateAsync(request);
             }
             return new ApiResponse();
         }
