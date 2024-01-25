@@ -43,13 +43,16 @@ namespace PhiThanh.Modules.PostModule
 
     public class CreateOrUpdatePostHandler(IPostRepository postRepository,
         ITagRepository tagRepository, IUnitOfWork uow, IMapper mapper, ILogger logger,
-        ICategoryRepository categoryRepository) :
+        ICategoryRepository categoryRepository, IPostCategoryRepository postCategoryRepository,
+        IPostTagRepository postTagRepository) :
         ICommandHandler<CreateOrUpdatePostRequest>
     {
         private readonly IMapper _mapper = mapper;
         private readonly IPostRepository _postRepository = postRepository;
         private readonly ITagRepository _tagRepository = tagRepository;
         private readonly ICategoryRepository _categoryRepository = categoryRepository;
+        private readonly IPostCategoryRepository _postCategoryRepository = postCategoryRepository;
+        private readonly IPostTagRepository _postTagRepository = postTagRepository;
         private readonly IUnitOfWork _uow = uow;
         private readonly ILogger _logger = logger;
 
@@ -160,6 +163,16 @@ namespace PhiThanh.Modules.PostModule
                 request.DisplayDate = DateTime.Now;
             }
 
+            if (entity.Tags!.Count > 0)
+            {
+                await _postTagRepository.DeleteAsync(entity.Tags);
+            }
+
+            if (entity.Categories!.Count > 0)
+            {
+                await _postCategoryRepository.DeleteAsync(entity.Categories);
+            }
+
             if (request.Tags.Count > 0)
             {
                 var existedTags = await _tagRepository.GetListAsync(f => request.Tags.Contains(f.Key));
@@ -184,7 +197,8 @@ namespace PhiThanh.Modules.PostModule
                 ];
             }
 
-            await _postRepository.UpdateAsync(entity, true);
+            await _postRepository.UpdateAsync(entity);
+            await _uow.SaveChangesAsync();
             return entity;
         }
     }

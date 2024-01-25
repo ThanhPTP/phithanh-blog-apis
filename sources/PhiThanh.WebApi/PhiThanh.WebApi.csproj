@@ -12,6 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\**" />
+    <Content Remove="wwwroot\**" />
+    <EmbeddedResource Remove="wwwroot\**" />
+    <None Remove="wwwroot\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Asp.Versioning.Abstractions" Version="8.0.0" />
     <PackageReference Include="Asp.Versioning.Http" Version="8.0.0" />
     <PackageReference Include="Asp.Versioning.Mvc" Version="8.0.0" />
@@ -30,10 +37,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PhiThanh.Modules\PhiThanh.Modules.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\" />
   </ItemGroup>
 
 </Project>
